@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -10,6 +11,11 @@ func handlerLogin(s *state, cmd command) error {
 	}
 
 	username := cmd.args[0]
+
+	_, err := s.db.GetUser(context.Background(), username)
+	if err != nil {
+		return fmt.Errorf("Encountered error when validating user: %w\n", err)
+	}
 
 	if err := s.cfg.SetUser(username); err != nil {
 		return err
