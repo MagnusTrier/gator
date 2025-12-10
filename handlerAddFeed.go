@@ -8,18 +8,13 @@ import (
 	"time"
 )
 
-func handlerAddFeed(s *state, cmd command) error {
+func handlerAddFeed(s *state, cmd command, user database.User) error {
 	if len(cmd.args) < 2 {
 		return fmt.Errorf("addfeed command requires feed name and feed url\n")
 	}
 
 	name := cmd.args[0]
 	url := cmd.args[1]
-
-	user, err := s.db.GetUser(context.Background(), s.cfg.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("Encountered error when getting user: %w\n", err)
-	}
 
 	args := database.CreateFeedParams{
 		ID:        uuid.New(),
